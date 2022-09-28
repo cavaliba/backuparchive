@@ -18,7 +18,7 @@ import socket
 
 ARGS = {}
 CONF = {}
-VERSION = "backuparchive - Version 1.1 - 2022/09/28 - cavaliba.com"
+VERSION = "backuparchive - Version 1.2 - 2022/09/28 - cavaliba.com"
 
 
 THRESHOLD = {}
@@ -34,7 +34,6 @@ INTERVALS["day"]   =     86400
 INTERVALS["week"]  =    604800
 INTERVALS["month"] =   2678400   # 31 days
 INTERVALS["year"]  =  31557600
-
 
 
 # ----
@@ -360,9 +359,12 @@ if __name__ == "__main__":
                 continue
 
             delta_threshold = THRESHOLD[unit]
-            # too recent, don't copy
+            # old enough,  copy
             if delta > delta_threshold:
-                shutil.copy2(newestbackup, path, follow_symlinks=True)
+                # add now prefix and copy
+                now = datetime.datetime.today().strftime("%Y%m%d_%H%M%S_")
+                mynewfile = now + newestbackup
+                shutil.copy2(mynewfile, path, follow_symlinks=True)
                 logit("  copied: " + newestbackup)
 
 
