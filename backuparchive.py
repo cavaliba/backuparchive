@@ -18,7 +18,7 @@ import socket
 
 ARGS = {}
 CONF = {}
-VERSION = "backuparchive - Version 1.0 - 2022/09/25 - cavaliba.com"
+VERSION = "backuparchive - Version 1.1 - 2022/09/28 - cavaliba.com"
 
 
 THRESHOLD = {}
@@ -158,7 +158,7 @@ def parse_arguments(myargs):
 
     r = parser.parse_args(myargs)
     return vars(r)
-    
+
 # ----
 
 
@@ -200,18 +200,18 @@ def get_newest(path,extension):
         if not os.path.isfile(  fullfile ):
             continue
 
-        if extension:            
+        if extension:
             if not file.endswith(extension):
                 continue
-        
+
         age = int ( os.path.getmtime( fullfile ) )
 
         if age > newestage:
-            newestage = age 
+            newestage = age
             newestfile = fullfile
-      
+
     return newestfile
-    
+
 
 
 def get_oldest(path,extension):
@@ -225,16 +225,16 @@ def get_oldest(path,extension):
         if not os.path.isfile(  fullfile ):
             continue
 
-        if extension:            
+        if extension:
             if not file.endswith(extension):
                 continue
-        
+
         age = int ( os.path.getmtime( fullfile ) )
 
         if oldestage == -1 or age < oldestage:
-            oldestage = age 
+            oldestage = age
             oldestfile = fullfile
-      
+
     return oldestfile
 
 
@@ -248,8 +248,8 @@ if __name__ == "__main__":
         logit("Should use Python >= 3.6")
         sys.exit()
 
-    signal.signal(signal.SIGALRM, timeout_handler)
-    signal.alarm(60)   # seconds
+#    signal.signal(signal.SIGALRM, timeout_handler)
+#    signal.alarm(60)   # seconds
 
 
     ARGS = parse_arguments(sys.argv[1:])
@@ -269,7 +269,7 @@ if __name__ == "__main__":
         configfile = "conf.yml"
     try:
         CONF = conf_load_file(configfile)
-    except:        
+    except:
         print("Could not load config file " + configfile)
         sys.exit()
 
@@ -373,7 +373,7 @@ if __name__ == "__main__":
             oldestarchive = get_oldest(path, extension)
             if os.path.isfile(oldestarchive):
                 oldestarchive_age = int ( os.path.getmtime( oldestarchive ) )
-                
+
                 now = int(time.time())
                 delta = now - oldestarchive_age
                 logit("  oldest archive: " + oldestarchive + " - delta from now is " + display_time(delta,4))
@@ -382,7 +382,7 @@ if __name__ == "__main__":
                 logit("  no archives yet")
                 delta = 0
 
-            
+
             items = delta / INTERVALS[unit]
             #print(items)
             if items > maxvalue:
