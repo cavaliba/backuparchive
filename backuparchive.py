@@ -367,24 +367,28 @@ if __name__ == "__main__":
 
 
 
-        # PURGE OLD
+        # PURGE OLD files
         if method == "purge" or method == "rotate":
 
-            oldestarchive = get_oldest(path, extension)
-            if os.path.isfile(oldestarchive):
-                oldestarchive_age = int ( os.path.getmtime( oldestarchive ) )
+            # loop as much as needed 
+            done = False
+            while not done:
 
-                now = int(time.time())
-                delta = now - oldestarchive_age
-                logit("  oldest archive: " + oldestarchive + " - delta from now is " + display_time(delta,4))
+                oldestarchive = get_oldest(path, extension)
+                if os.path.isfile(oldestarchive):
+                    oldestarchive_age = int ( os.path.getmtime( oldestarchive ) )
+                    now = int(time.time())
+                    delta = now - oldestarchive_age
+                    logit("  oldest archive: " + oldestarchive + " - delta from now is " + display_time(delta,4))
+                else:
+                    logit("  no archives yet")
+                    delta = 0
 
-            else:
-                logit("  no archives yet")
-                delta = 0
 
-
-            items = delta / INTERVALS[unit]
-            #print(items)
-            if items > maxvalue:
-                os.remove(oldestarchive)
-                logit("  removed: " + oldestarchive)
+                items = delta / INTERVALS[unit]
+                #print(items)
+                if items > maxvalue:
+                    os.remove(oldestarchive)
+                    logit("  removed: " + oldestarchive)
+                else:
+                    done = True
