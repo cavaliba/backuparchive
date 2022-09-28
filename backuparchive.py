@@ -364,7 +364,7 @@ if __name__ == "__main__":
                 # add now prefix and copy
                 now = datetime.datetime.today().strftime("%Y%m%d_%H%M%S_")
                 head, tail = os.path.split(newestbackup)
-                newfile = os.path.join(now,tail)
+                newfile = now + tail
                 newtarget = os.path.join(path, newfile)
                 #shutil.copy2(newestbackup, path, follow_symlinks=True)
                 shutil.copy2(newestbackup, newtarget, follow_symlinks=True)
